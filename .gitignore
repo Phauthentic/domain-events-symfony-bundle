@@ -1,0 +1,14 @@
+# Composer dependencies
+/vendor/
+/bin/
+
+# Logs and cache
+/var/logs/
+/var/cache/
+/var/coverage/
+.phpunit.cache/
+
+# Environment variables
+/.env
+/.env.local
+/.env.*.local

@@ -1,0 +1,81 @@
+{
+    "name": "phauthentic/domain-events-symfony-bundle",
+    "description": "Domain Events for Symfony",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Florian Krämer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Phauthentic\\Symfony\\DomainEvents\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phauthentic\\Symfony\\DomainEvents\\Tests\\": "tests/Tests/"
+        }
+    },
+    "require": {
+        "php": ">=8.2",
+        "doctrine/orm": "^3.0",
+        "doctrine/doctrine-bundle": "^2.0.0",
+        "ramsey/uuid-doctrine": "^1.5",
+        "symfony/event-dispatcher": "^6.4 || ^7.0",
+        "symfony/framework-bundle": "^6.4 || ^7.0",
+        "symfony/messenger": "^6.4 || ^7.0",
+        "symfony/property-access": "^6.4 || ^7.0",
+        "symfony/serializer": "^6.4 || ^7.0"
+    },
+    "require-dev": {
+        "dg/bypass-finals": "^1.8",
+        "phpmd/phpmd": "^2.15",
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^11.5.0",
+        "roave/security-advisories": "dev-latest",
+        "squizlabs/php_codesniffer": "^3.11"
+    },
+    "scripts": {
+        "test": [
+            "phpunit"
+        ],
+        "infection": [
+            "bin/infection"
+        ],
+        "test-coverage": [
+            "phpunit --coverage-text"
+        ],
+        "test-coverage-html": [
+            "phpunit --coverage-html var/coverage/"
+        ],
+        "cscheck": [
+            "bin/phpcs src/ tests/ -s"
+        ],
+        "csfix": [
+            "bin/phpcbf src/ tests/"
+        ],
+        "analyze": [
+            "phpstan analyse src/"
+        ],
+        "analyse": [
+            "bin/phpstan analyse src/"
+        ],
+        "phpmd": [
+            "bin/phpmd ./src/ text phpmd.xml"
+        ],
+        "all": [
+            "@csfix",
+            "@cscheck",
+            "@analyse",
+            "@test"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "bin-dir": "bin"
+    }
+}

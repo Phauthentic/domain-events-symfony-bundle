@@ -1,0 +1,9 @@
+services:
+
+  Phauthentic\Symfony\DomainEvents\Domain\ReflectionAggregateExtractor:
+
+  Phauthentic\Symfony\DomainEvents\Domain\AggregateExtractorInterface: '@Phauthentic\Symfony\DomainEvents\Domain\ReflectionAggregateExtractor'
+
+  Phauthentic\Symfony\DomainEvents\Doctrine\DomainEventEmitter:
+    tags:
+      - { name: 'doctrine.event_listener', event: 'postPersist', priority: 1 }
