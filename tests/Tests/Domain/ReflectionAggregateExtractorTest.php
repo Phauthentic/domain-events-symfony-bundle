@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Phauthentic\Symfony\DomainEvents\Tests\Domain;
 
+use Phauthentic\Symfony\DomainEvents\Doctrine\DomainEventEmitterException;
+use Phauthentic\Symfony\DomainEvents\Domain\Attribute\AggregateRoot;
 use Phauthentic\Symfony\DomainEvents\Domain\ReflectionAggregateExtractor;
+use Phauthentic\Symfony\DomainEvents\Tests\DefectAggregateRoot;
 use Phauthentic\Symfony\DomainEvents\Tests\TestAggregate;
 use Phauthentic\Symfony\DomainEvents\Tests\TestEvent;
 use PHPUnit\Framework\Attributes\Test;
@@ -51,5 +54,18 @@ class ReflectionAggregateExtractorTest extends TestCase
         $extractor->purgeDomainEvents($aggregate);
 
         $this->assertCount(0, $aggregate->getDomainEvents());
+    }
+
+    #[Test]
+    public function testMissingDomainEventsException(): void
+    {
+        $aggregate = new DefectAggregateRoot();
+
+        $extractor = new ReflectionAggregateExtractor();
+
+        $this->expectException(DomainEventEmitterException::class);
+        $this->expectExceptionMessage('Property domainEvents not found in class');
+
+        $extractor->purgeDomainEvents($aggregate);
     }
 }

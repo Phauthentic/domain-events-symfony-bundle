@@ -21,12 +21,16 @@ class AggregateInfo
     ) {
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getAggregateId(): string
     {
         return $this->aggregateId;
     }
 
     /**
+     * @codeCoverageIgnore
      * @return array<int, object>
      */
     public function getDomainEvents(): array
@@ -34,6 +38,9 @@ class AggregateInfo
         return $this->domainEvents;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getAggregateVersion(): ?int
     {
         return $this->aggregateVersion;

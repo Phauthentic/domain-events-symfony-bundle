@@ -7,6 +7,7 @@ namespace Phauthentic\Symfony\DomainEvents\Tests\Doctrine;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Phauthentic\Symfony\DomainEvents\Doctrine\DomainEventEmitter;
+use Phauthentic\Symfony\DomainEvents\Doctrine\DomainEventEmitterException;
 use Phauthentic\Symfony\DomainEvents\Domain\ReflectionAggregateExtractor;
 use Phauthentic\Symfony\DomainEvents\Tests\TestAggregate;
 use Phauthentic\Symfony\DomainEvents\Tests\TestEvent;
@@ -81,6 +82,30 @@ class DomainEventEmitterTest extends TestCase
         $this->domainEventBus
             ->expects($this->never())
             ->method('dispatch');
+
+        $this->domainEventEmitter->postPersist($postPersistEventArgs);
+    }
+
+    #[Test]
+    public function testEmitEventCatchesException(): void
+    {
+        $entity = new TestAggregate();
+        $entity->addEvent(new TestEvent());
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $postPersistEventArgs = new PostPersistEventArgs($entity, $entityManager);
+
+        $this->domainEventBus
+            ->expects($this->once())
+            ->method('dispatch')
+            ->willThrowException(new \Exception('Test exception'));
+
+        $this->logger
+            ->expects($this->once())
+            ->method('alert')
+            ->with($this->stringContains('Failed to dispatched event'));
+
+        $this->expectException(DomainEventEmitterException::class);
 
         $this->domainEventEmitter->postPersist($postPersistEventArgs);
     }

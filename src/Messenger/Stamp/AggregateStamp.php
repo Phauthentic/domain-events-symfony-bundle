@@ -17,11 +17,17 @@ readonly final class AggregateStamp implements StampInterface
     ) {
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getAggregateType(): string
     {
         return $this->aggregateType;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getAggregateId(): string
     {
         return $this->aggregateId;

@@ -6,9 +6,7 @@ namespace Phauthentic\Symfony\DomainEvents\Domain;
 
 use Phauthentic\Symfony\DomainEvents\Doctrine\DomainEventEmitterException;
 use Phauthentic\Symfony\DomainEvents\Domain\Attribute\AggregateRoot;
-use ReflectionAttribute;
 use ReflectionClass;
-use RuntimeException;
 
 /**
  *
@@ -56,13 +54,20 @@ class ReflectionAggregateExtractor implements AggregateExtractorInterface
         return $attributes[0]->newInstance();
     }
 
+    /**
+     * @param string $propertyName
+     * @param ReflectionClass<object> $reflectionClass
+     * @param object $aggregate
+     * @return mixed
+     * @throws DomainEventEmitterException
+     */
     protected function getProperty(
         string $propertyName,
         ReflectionClass $reflectionClass,
         object $aggregate
     ): mixed {
         if (!$reflectionClass->hasProperty($propertyName)) {
-            throw new RuntimeException(sprintf(
+            throw new DomainEventEmitterException(sprintf(
                 'Property %s not found in class %s',
                 $propertyName,
                 $reflectionClass->getName()
@@ -84,11 +89,10 @@ class ReflectionAggregateExtractor implements AggregateExtractorInterface
         }
 
         if ($reflectionClass->hasProperty($aggregateRootAttribute->domainEvents) === false) {
-            throw new DomainEventEmitterException(sprintf(
-                'Property %s not found in class %s',
-                $aggregateRootAttribute->domainEvents,
-                $reflectionClass->getName()
-            ));
+            throw DomainEventEmitterException::missingDomainEvents(
+                $aggregateRootAttribute,
+                $reflectionClass
+            );
         }
 
         $reflectionClass
